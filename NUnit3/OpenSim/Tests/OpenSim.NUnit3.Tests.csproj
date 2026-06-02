@@ -1,0 +1,93 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;net8.0;net10.0</TargetFrameworks>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
+    <RunSettingsFilePath>OpenSim.NUnit3.runsettings</RunSettingsFilePath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="NUnit" Version="3.14.0" />
+    <PackageReference Include="coverlet.collector" Version="6.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="NUnit3TestAdapter" Version="4.6.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
+    <Compile Include="NUnitCompatibilitySmokeTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <Compile Include="NUnitCompatibilitySmokeTests.cs" />
+    <Compile Include="..\Data\Tests\**\*.cs"
+             Exclude="..\Data\Tests\bin\**\*.cs;..\Data\Tests\obj\**\*.cs" />
+    <Compile Include="..\Framework\Tests\**\*.cs"
+             Exclude="..\Framework\Tests\bin\**\*.cs;..\Framework\Tests\obj\**\*.cs" />
+    <Compile Include="..\Framework\Serialization\Tests\**\*.cs"
+             Exclude="..\Framework\Serialization\Tests\bin\**\*.cs;..\Framework\Serialization\Tests\obj\**\*.cs" />
+    <Compile Include="..\Tests\Common\ANumericalToleranceConstraint.cs" />
+    <Compile Include="..\Tests\Common\DatabaseTestAttribute.cs" />
+    <Compile Include="..\Tests\Common\DoubleToleranceConstraint.cs" />
+    <Compile Include="..\Tests\Common\Helpers\**\*.cs"
+             Exclude="..\Tests\Common\Helpers\bin\**\*.cs;..\Tests\Common\Helpers\obj\**\*.cs" />
+    <Compile Include="..\Tests\Common\LongRunningAttribute.cs" />
+    <Compile Include="..\Tests\Common\Mock\TestScene.cs" />
+    <Compile Include="..\Tests\Common\Mock\TestClient.cs" />
+    <Compile Include="..\Tests\Common\Mock\TestLLUDPServer.cs" />
+    <Compile Include="..\Tests\Common\Mock\MockGroupsServicesConnector.cs" />
+    <Compile Include="..\Tests\Common\Mock\MockScriptEngine.cs" />
+    <Compile Include="..\Tests\Common\Mock\TestLandChannel.cs" />
+    <Compile Include="..\Tests\Common\TestsAssetCache.cs" />
+    <Compile Include="..\Tests\Common\VectorToleranceConstraint.cs" />
+    <Compile Include="..\Tests\Common\QuaternionToleranceConstraint.cs" />
+    <Compile Include="..\Tests\Common\OpenSimTestCase.cs" />
+    <Compile Include="..\Tests\Common\TestHelpers.cs" />
+    <Compile Include="..\Tests\Common\TestLogging.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <ProjectReference Include="..\**\*.csproj"
+                      Exclude="..\Tests\OpenSim.NUnit3.Tests.csproj;..\**\bin\**\*.csproj;..\**\obj\**\*.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <Reference Include="OpenMetaverse">
+      <HintPath>..\..\bin\OpenMetaverse.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenMetaverse.StructuredData">
+      <HintPath>..\..\bin\OpenMetaverse.StructuredData.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenMetaverseTypes">
+      <HintPath>..\..\bin\OpenMetaverseTypes.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\bin\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Nini">
+      <HintPath>..\..\bin\Nini.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data">
+      <HintPath>..\..\bin\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Data.Sqlite">
+      <HintPath>..\..\bin\Mono.Data.Sqlite.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Addins">
+      <HintPath>..\..\bin\Mono.Addins.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Caching">
+      <HintPath>..\..\bin\System.Runtime.Caching.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

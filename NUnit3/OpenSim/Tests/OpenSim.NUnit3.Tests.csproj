@@ -28,6 +28,10 @@
     <Compile Include="NUnitCompatibilitySmokeTests.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="TestDataConnections.ini" />
+  </ItemGroup>
+
   <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
     <Compile Include="NUnitCompatibilitySmokeTests.cs" />
     <Compile Include="..\Data\Tests\**\*.cs"

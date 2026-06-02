@@ -100,7 +100,30 @@ namespace OpenSim.Data.Tests
                     Assert.Ignore();
 
                 if (Util.IsWindows())
-                    Util.LoadArchSpecificWindowsDll("sqlite3.dll");
+                {
+                    // In dotnet test runs the working directory can vary.
+                    // Probe likely bin roots for native SQLite libraries.
+                    string[] nativeLibraries = new string[] { "sqlite3.dll", "e_sqlite3.dll" };
+                    string[] candidateBinRoots = new string[]
+                    {
+                        Path.Combine(Directory.GetCurrentDirectory(), "bin"),
+                        Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "bin")),
+                        Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "..", "bin")),
+                        Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "bin"))
+                    };
+
+                    foreach (string nativeLibrary in nativeLibraries)
+                    {
+                        if (Util.LoadArchSpecificWindowsDll(nativeLibrary))
+                            continue;
+
+                        foreach (string candidate in candidateBinRoots)
+                        {
+                            if (Util.LoadArchSpecificWindowsDll(nativeLibrary, candidate))
+                                break;
+                        }
+                    }
+                }
 
                 // for SQLite, if no explicit conn string is specified, use a temp file
                 if (String.IsNullOrEmpty(m_connStr))
@@ -126,9 +149,13 @@ namespace OpenSim.Data.Tests
                     conn.Open();
                     conn.Close();
                 }
-                catch
+                catch (Exception e)
                 {
-                    string msg = String.Format("{0} is unable to connect to the database, ignoring tests", typeof(TConn).Name);
+                    string msg = String.Format(
+                        "{0} is unable to connect to the database, ignoring tests. Reason: {1}: {2}",
+                        typeof(TConn).Name,
+                        e.GetType().Name,
+                        e.Message);
                     m_log.Warn(msg);
                     Assert.Ignore(msg);
                 }
@@ -146,7 +173,12 @@ namespace OpenSim.Data.Tests
             catch (Exception e)
             {
                 m_log.Error(e.ToString());
-                Assert.Ignore();
+                Assert.Ignore(
+                    String.Format(
+                        "Service initialization failed for {0}. Reason: {1}: {2}",
+                        typeof(TService).Name,
+                        e.GetType().Name,
+                        e.Message));
             }
         }
 

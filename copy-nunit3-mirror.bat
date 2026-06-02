@@ -32,11 +32,13 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command ^
   "  ($_ -eq 'bin/OpenSim.Tests.ini') -or" ^
   "  ($_ -eq 'bin/config-include/Standalone.Tests.ini') -or" ^
   "  ($_ -eq 'bin/config-include/StandaloneCommon.Tests.ini') -or" ^
+  "  ($_ -eq 'OpenSim/Data/SQLite/SQLiteEstateData.cs') -or" ^
   "  ($_ -eq 'OpenSim/Tests/OpenSim.NUnit3.Tests.csproj') -or" ^
   "  ($_ -eq 'OpenSim/Tests/OpenSim.NUnit3.runsettings') -or" ^
+  "  ($_ -eq 'OpenSim/Tests/TestDataConnections.ini') -or" ^
   "  ($_ -eq 'OpenSim/Tests/NUnitCompatibilitySmokeTests.cs')" ^
   "} | Sort-Object -Unique;" ^
-  "foreach ($must in @('NUnit-readme.md','run-nunit3-tests.bat','bin/OpenSim.Tests.ini','bin/config-include/Standalone.Tests.ini','bin/config-include/StandaloneCommon.Tests.ini','OpenSim/Tests/OpenSim.NUnit3.Tests.csproj','OpenSim/Tests/OpenSim.NUnit3.runsettings')) {" ^
+  "foreach ($must in @('NUnit-readme.md','run-nunit3-tests.bat','bin/OpenSim.Tests.ini','bin/config-include/Standalone.Tests.ini','bin/config-include/StandaloneCommon.Tests.ini','OpenSim/Data/SQLite/SQLiteEstateData.cs','OpenSim/Tests/OpenSim.NUnit3.Tests.csproj','OpenSim/Tests/OpenSim.NUnit3.runsettings','OpenSim/Tests/TestDataConnections.ini')) {" ^
   "  if (Test-Path -Path $must -PathType Leaf) { $selected += $must }" ^
   "}" ^
   "$selected = $selected | Sort-Object -Unique;" ^

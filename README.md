@@ -1,57 +1,57 @@
-# opensim-nunit3
-NUnit 3.0 tests
+# opensim-nunit3  
+NUnit 3.0 tests  
 
-## NUnit 3 Multi-Target Test Setup (net6.0, net8.0, net10.0)
+## NUnit 3 Multi-Target Test Setup (net6.0, net8.0, net10.0)  
 
-Dieses Repository verwendet jetzt ein zentrales NUnit-3-Testprojekt:
+This repository now uses a central NUnit 3 test project:  
 
-- `OpenSim/Tests/OpenSim.NUnit3.Tests.csproj`
+- `OpenSim/Tests/OpenSim.NUnit3.Tests.csproj`  
 
-Das Projekt ist auf folgende Target Frameworks konfiguriert:
+The project is configured for the following target frameworks:  
 
-- `net6.0`
-- `net8.0`
-- `net10.0`
+- `net6.0`  
+- `net8.0`  
+- `net10.0`  
 
-## Ziel
+## Goal  
 
-Ein zentraler, stabiler NUnit-3-Runner fuer `net6.0`, `net8.0` und `net10.0`, der per `dotnet test` laeuft und als kompatibler Einstiegspunkt fuer weitere Migration dient.
+A central, stable NUnit 3 runner for `net6.0`, `net8.0`, and `net10.0` that runs via `dotnet test` and serves as a compatible entry point for further migration.  
 
-## Was wurde umgestellt
+## What has been migrated  
 
-1. NUnit-3 Testprojekt mit folgenden Paketen:
-   - `Microsoft.NET.Test.Sdk`
-   - `NUnit` (3.x)
-   - `NUnit3TestAdapter`
-2. Legacy-Attribute in Testquellen wurden auf NUnit-3-Namen umgestellt:
-   - `[TestFixtureSetUp]` -> `[OneTimeSetUp]`
-   - `[TestFixtureTearDown]` -> `[OneTimeTearDown]`
-3. Ein kompatibler Smoke-Test (`NUnitCompatibilitySmokeTests.cs`) wird auf allen drei Target Frameworks ausgefuehrt.
-4. Fuer `net10.0` sind zusaetzlich folgende Legacy-Testbloecke aktiv migriert:
-   - `OpenSim/Framework/Tests`
-   - `OpenSim/Framework/Serialization/Tests`
-   - `OpenSim/Data/Tests`
-5. Legacy-Custom-Constraints wurden auf die NUnit3-API (`ApplyTo<TActual>`) umgestellt:
-   - `DoubleToleranceConstraint`
-   - `VectorToleranceConstraint`
-   - `QuaternionToleranceConstraint`
-   - `PropertyCompareConstraint`
+1. NUnit 3 test project with the following packages:  
+   - `Microsoft.NET.Test.Sdk`  
+   - `NUnit` (3.x)  
+   - `NUnit3TestAdapter`  
+2. Legacy attributes in test sources have been updated to NUnit 3 names:  
+   - `[TestFixtureSetUp]` -> `[OneTimeSetUp]`  
+   - `[TestFixtureTearDown]` -> `[OneTimeTearDown]`  
+3. A compatible smoke test (`NUnitCompatibilitySmokeTests.cs`) runs on all three target frameworks.  
+4. For `net10.0`, the following legacy test blocks have also been actively migrated:  
+   - `OpenSim/Framework/Tests`  
+   - `OpenSim/Framework/Serialization/Tests`  
+   - `OpenSim/Data/Tests`  
+5. Legacy custom constraints have been updated to the NUnit 3 API (`ApplyTo<TActual>`):  
+   - `DoubleToleranceConstraint`  
+   - `VectorToleranceConstraint`  
+   - `QuaternionToleranceConstraint`  
+   - `PropertyCompareConstraint`  
 
-## Testausfuehrung
+## Running tests  
 
-Im Ordner `opensim` (Solution-Root) ausfuehren:
+Execute from the `opensim` folder (solution root):  
 
 ```powershell
 dotnet restore OpenSim/Tests/OpenSim.NUnit3.Tests.csproj
 ```
 
-Empfohlener Einstieg (NUnit3-only, mit Coverage/RunSettings):
+Recommended entry point (NUnit3-only, with coverage/RunSettings):  
 
 ```powershell
 run-nunit3-tests.bat quick
 ```
 
-Weitere Modi:
+Additional modes:  
 
 ```powershell
 run-nunit3-tests.bat full
@@ -59,49 +59,49 @@ run-nunit3-tests.bat matrix
 run-nunit3-tests.bat compat
 ```
 
-Dabei gilt:
+Where:  
 
-- `quick`: net10, ohne `Long*` und `Database`
-- `full`: net10 ohne Category-Filter
-- `matrix`: net8 + net10, ohne `Long*` und `Database`
-- `compat`: net6 + net8 + net10 Kompatibilitaetslauf (net6 wird bei fehlender Runtime automatisch uebersprungen)
+- `quick`: net10, without `Long*` and `Database`  
+- `full`: net10 without category filters  
+- `matrix`: net8 + net10, without `Long*` and `Database`  
+- `compat`: net6 + net8 + net10 compatibility run (net6 is automatically skipped if the runtime is missing)  
 
-Die zentrale Konfiguration liegt in:
+The central configuration is located in:  
 
-- `OpenSim/Tests/OpenSim.NUnit3.runsettings`
+- `OpenSim/Tests/OpenSim.NUnit3.runsettings`  
 
-Sie aktiviert standardmaessig XPlat Code Coverage, damit Testlaeufe besser fuer Schwachstellenanalyse auswertbar sind.
+It enables XPlat Code Coverage by default, making test runs easier to evaluate for vulnerability analysis.  
 
-## Dedizierte Test-INI-Konfiguration
+## Dedicated test INI configuration  
 
-Fuer reproduzierbare Integrationslaeufe gibt es jetzt eigene Test-INI-Dateien:
+For reproducible integration runs, dedicated test INI files are now available:  
 
-- `bin/OpenSim.Tests.ini`
-- `bin/config-include/Standalone.Tests.ini`
-- `bin/config-include/StandaloneCommon.Tests.ini`
-- `bin/Robust.Tests.ini` (bereits vorhanden)
+- `bin/OpenSim.Tests.ini`  
+- `bin/config-include/Standalone.Tests.ini`  
+- `bin/config-include/StandaloneCommon.Tests.ini`  
+- `bin/Robust.Tests.ini` (already present)  
 
-OpenSim mit Testkonfiguration starten:
+Starting OpenSim with test configuration:  
 
 ```powershell
 cd bin
 OpenSim.exe -inifile OpenSim.Tests.ini
 ```
 
-Robust mit Testkonfiguration starten:
+Starting Robust with test configuration:  
 
 ```powershell
 cd bin
 Robust.exe -inifile Robust.Tests.ini
 ```
 
-Alle Targets testen:
+Testing all targets:  
 
 ```powershell
 dotnet test OpenSim/Tests/OpenSim.NUnit3.Tests.csproj -c Release
 ```
 
-Gezielt pro Framework testen:
+Testing a specific framework:  
 
 ```powershell
 dotnet test OpenSim/Tests/OpenSim.NUnit3.Tests.csproj -c Release -f net6.0
@@ -109,57 +109,57 @@ dotnet test OpenSim/Tests/OpenSim.NUnit3.Tests.csproj -c Release -f net8.0
 dotnet test OpenSim/Tests/OpenSim.NUnit3.Tests.csproj -c Release -f net10.0
 ```
 
-Mit expliziter RunSettings-Datei:
+Using an explicit RunSettings file:  
 
 ```powershell
 dotnet test OpenSim/Tests/OpenSim.NUnit3.Tests.csproj -c Release -f net10.0 --settings OpenSim/Tests/OpenSim.NUnit3.runsettings
 ```
 
-Hinweise zu den Frameworks auf diesem Rechner:
+Notes on the frameworks on this machine:  
 
-- Die .NET-6-Runtime ist lokal installiert (`Microsoft.NETCore.App 6.0.36`) und der net6-Testlauf wurde erfolgreich verifiziert.
-- `net8.0` laeuft in der aktuellen Umgebung erfolgreich.
-- `net10.0` laeuft in der aktuellen Umgebung erfolgreich, inklusive der migrierten Legacy-Bloecke.
+- The .NET 6 runtime is installed locally (`Microsoft.NETCore.App 6.0.36`) and the net6 test run has been successfully verified.  
+- `net8.0` runs successfully in the current environment.  
+- `net10.0` runs successfully in the current environment, including the migrated legacy blocks.  
 
-Hinweis zu Data-Tests:
+Note on Data tests:  
 
-- Viele Data-Tests erwarten optionale DB-Verbindungsdaten aus der Resource-Datei `TestDataConnections.ini`.
-- Ist diese Resource nicht vorhanden, werden die betroffenen DB-Tests jetzt als `Skipped` markiert (statt als Fehler), damit lokale Runs ohne DB-Testinfrastruktur stabil bleiben.
+- Many Data tests expect optional DB connection data from the resource file `TestDataConnections.ini`.  
+- If this resource is missing, the affected DB tests are now marked as `Skipped` (instead of failing), so local runs without DB test infrastructure remain stable.  
 
-## Wichtige Betriebs-/Konfigurationshinweise
+## Important operational/configuration notes  
 
-### WebRtcVoiceServiceModule unter Windows
+### WebRtcVoiceServiceModule on Windows  
 
-Das `WebRtcVoiceServiceModule` benoetigt ein Janus-Gateway.
-Auf Windows ist in dieser Umgebung kein Janus-Gateway verfuegbar.
+The `WebRtcVoiceServiceModule` requires a Janus gateway.  
+On Windows, no Janus gateway is available in this environment.  
 
-Folge:
+Consequence:  
 
-- WebRTC-Voice-Funktionalitaet ist hier nicht nutzbar.
-- Entsprechende Modulmeldungen im Log sind erwartbar und nicht Teil der NUnit-Testmigration.
+- WebRTC voice functionality is not usable here.  
+- Corresponding module messages in the log are expected and not part of the NUnit test migration.  
 
-### Groups und SQLite
+### Groups and SQLite  
 
-Das Groups-Modul ist hier nicht aktiv, weil die Groups-Backends in dieser Konfiguration nicht mit SQLite betrieben werden.
+The Groups module is not active here because the Groups backends are not run with SQLite in this configuration.  
 
-Folge:
+Consequence:  
 
-- Warnungen wie `Could not get IGroupsModule` koennen im Laufzeitlog auftreten.
-- Das ist erwartetes Verhalten fuer diese Standalone/SQLite-Konfiguration.
+- Warnings such as `Could not get IGroupsModule` may appear in the runtime log.  
+- This is expected behavior for this standalone/SQLite configuration.  
 
-## Scope
+## Scope  
 
-Diese Umstellung liefert einen lauffaehigen NUnit-3-Multi-Target-Runner mit aktiv migrierten Legacy-Testbloecken unter `net10.0`, stabilem Smoke-Test unter `net8.0` und build-faehigem `net6.0` (Runtime 6.0 erforderlich fuer Ausfuehrung).
+This migration delivers a working NUnit 3 multi-target runner with actively migrated legacy test blocks under `net10.0`, a stable smoke test under `net8.0`, and build-capable `net6.0` (runtime 6.0 required for execution).  
 
-Wichtig zur Framework-Kompatibilitaet:
+Important notes on framework compatibility:  
 
-- Der Runner selbst ist fuer `net6.0`, `net8.0` und `net10.0` kompatibel.
-- Die breite Legacy-Suite (Data/Framework/Serialization) ist bewusst an `net10.0` gekoppelt, da die zugrunde liegenden OpenSim-Projekte aktuell net10-only sind.
-- Fuer net6/net8 bleibt der stabile Smoke-/Baseline-Pfad aktiv, solange die betroffenen Abhaengigkeitsprojekte nicht wieder multi-targeted sind.
-Fachliche Laufzeitwarnungen aus optionalen Addons (z.B. Janus/WebRTC oder Groups-Backends) werden hier dokumentiert, aber nicht als Teil der NUnit-Migration "wegkonfiguriert".
+- The runner itself is compatible with `net6.0`, `net8.0`, and `net10.0`.  
+- The broad legacy suite (Data/Framework/Serialization) is intentionally tied to `net10.0` because the underlying OpenSim projects are currently net10-only.  
+- For net6/net8, the stable smoke/baseline path remains active as long as the affected dependency projects are not multi-targeted again.  
+Runtime warnings from optional add-ons (e.g., Janus/WebRTC or Groups backends) are documented here but are not "configured away" as part of the NUnit migration.  
 
-## Hinweis zu prebuild.xml und altem NUnit-Flow
+## Note on prebuild.xml and the old NUnit flow  
 
-Die NUnit3-Ausfuehrung erfolgt ueber `dotnet test` auf `OpenSim.NUnit3.Tests.csproj`.
+NUnit3 execution is done via `dotnet test` on `OpenSim.NUnit3.Tests.csproj`.  
 
-Der legacy Prebuild-Testpfad in `prebuild.xml` ist dafuer nicht erforderlich und wird fuer den NUnit3-Standardlauf nicht mehr benoetigt.
+The legacy Prebuild test path in `prebuild.xml` is not required for this and is no longer needed for the standard NUnit3 run.
